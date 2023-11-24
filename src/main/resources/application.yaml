@@ -1,0 +1,51 @@
+debug: false
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    com.fastcampus.projectboard: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/board
+    username: twonezero
+    password: password1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    # 테스트용 db 데이터 생성
+    # data.sql 파일에 초기 데이터 삽입
+    defer-datasource-initialization: true
+    # 자동으로 ddl 문 생성해줌
+    hibernate:
+      ddl-auto: create
+    #    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate: # ORM 더 자세한 설정
+        # sql 포맷팅
+        format_sql: true
+        # bulk 로 select 하는 사이즈
+        default_batch_fetch_size: 100
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
+
+#--- test 위한 프로필
+#
+#spring:
+#  config:
+#    activate:
+#      on-profile: testdb
+#  datasource:
+#    url: jdbc:h2:mem:board;mode=mysql
+#    driver-class-name: org.h2.Driver
+#  sql.init.mode: always
+#  test:
+#    database:
+#      replace: none

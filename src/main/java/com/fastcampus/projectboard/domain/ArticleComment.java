@@ -20,9 +20,8 @@ import java.util.Objects;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy"),
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class ArticleComment {
+public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,20 +36,9 @@ public class ArticleComment {
     @Column(nullable = false, length = 500)
     private String content; // 내용
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt; // 생성일자
-    @CreatedBy
-    @Column(nullable = false, length = 100)
-    private String createdBy; // 생성자
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일자
-    @LastModifiedBy
-    @Column(nullable = false, length = 100)
-    private String modifiedBy; // 수정자
 
-    protected ArticleComment(){}
+    protected ArticleComment() {
+    }
 
     private ArticleComment(Article article, String content) {
         this.article = article;
@@ -66,7 +54,7 @@ public class ArticleComment {
         if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
 //        ArticleComment that = (ArticleComment) o;
-        if(!(o instanceof ArticleComment articleComment)) return false;
+        if (!(o instanceof ArticleComment articleComment)) return false;
         // id != null -> 아직 영속화되지 않은 객체는 같지 않음
         return id != null && id.equals(articleComment.id);
     }

@@ -29,9 +29,6 @@ spring:
         format_sql: true
         # bulk 로 select 하는 사이즈
         default_batch_fetch_size: 100
-  h2:
-    console:
-      enabled: true
   sql:
     init:
       mode: always

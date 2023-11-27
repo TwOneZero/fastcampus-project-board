@@ -1,6 +1,7 @@
 package com.fastcampus.projectboard.controller;
 
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@WebMvcTest -> 단위 테스트에서는 Spring의 공통 Auto Configuration 을 참조하지 않기 때문에 rest 통신 테스트는 안됨, 대신 통합테스트로 작성
+@Disabled("Spring Data Rest 통합테스트는 학습목적이므로 제외")
 @DisplayName("Data REST - API 테스트")
 @Transactional
 @AutoConfigureMockMvc

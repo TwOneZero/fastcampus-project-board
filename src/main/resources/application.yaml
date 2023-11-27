@@ -32,6 +32,11 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    rest:
+      base-path: /api
+      detection-strategy: annotated
+
 
 #--- test 위한 프로필
 #

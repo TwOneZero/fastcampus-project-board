@@ -25,9 +25,9 @@ import java.util.Set;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy"),
 })
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class) -> Auditing 할 컬럼을 옮긴 MappedSuperClass 쪽에 지정
 @Entity
-public class Article {
+public class Article extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,19 +49,20 @@ public class Article {
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt; // 생성일자
-    @CreatedBy
-    @Column(nullable = false, length = 100)
-    private String createdBy; // 생성자
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일자
-    @LastModifiedBy
-    @Column(nullable = false, length = 100)
-    private String modifiedBy; // 수정자
-
+//    @CreatedDate
+//    @Column(nullable = false)
+//    private LocalDateTime createdAt; // 생성일자
+//    @CreatedBy
+//    @Column(nullable = false, length = 100)
+//    private String createdBy; // 생성자
+//    @LastModifiedDate
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt; // 수정일자
+//    @LastModifiedBy
+//    @Column(nullable = false, length = 100)
+//    private String modifiedBy; // 수정자
+    //-> 위 메타 데이터들을 엔티티마다 넣을 것인지 아닌지 정하고
+    //한 번에 처리하기 위해서는 @Embedded 나 @MappedSuperClass 사용
 
     protected Article() {
     }

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 // @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@ToString(callSuper = true) //AuditingFields 에 있는 것도 ToString 가능하게
 @Table(indexes = {
         @Index(columnList = "content"),
         @Index(columnList = "createdAt"),
@@ -25,6 +25,9 @@ public class ArticleComment extends AuditingFields {
     @ManyToOne(optional = false/*,cascade = none -> default*/)
     private Article article; //게시글 (ID)
 
+    @Setter
+    @ManyToOne(optional = false)
+    private UserAccount userAccount;
 
     @Setter
     @Column(nullable = false, length = 500)
@@ -34,13 +37,14 @@ public class ArticleComment extends AuditingFields {
     protected ArticleComment() {
     }
 
-    private ArticleComment(Article article, String content) {
+    private ArticleComment(Article article, UserAccount userAccount, String content) {
         this.article = article;
+        this.userAccount = userAccount;
         this.content = content;
     }
 
-    public static ArticleComment of(Article article, String content) {
-        return new ArticleComment(article, content);
+    public static ArticleComment of(Article article, UserAccount userAccount, String content) {
+        return new ArticleComment(article, userAccount, content);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @Getter
-@ToString
+@ToString(callSuper = true) //AuditingFields 에 있는 것도 ToString 가능하게
 @Table(indexes = {
         @Index(columnList = "title"),
         @Index(columnList = "hashtag"),
@@ -21,13 +21,19 @@ import java.util.Set;
 //@EntityListeners(AuditingEntityListener.class) -> Auditing 할 컬럼을 옮긴 MappedSuperClass 쪽에 지정
 @Entity
 public class Article extends AuditingFields {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Setter
+    @ManyToOne(optional = false) // 필수 엔티티
+    private UserAccount userAccount;
+
+    @Setter
     @Column(nullable = false)
     private String title; // 제목
+
     @Setter
     @Column(nullable = false, length = 10000)
     private String content; // 내용
@@ -36,9 +42,9 @@ public class Article extends AuditingFields {
 //    @Column 옵션 없을 시 생략 가능
     private String hashtag; // 해시태그
 
-    @OrderBy("id")
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @ToString.Exclude /*-> circular referential 발생 방지*/
+    @OrderBy("createdAt DESC")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
 
@@ -60,15 +66,16 @@ public class Article extends AuditingFields {
     protected Article() {
     }
 
-    private Article(String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
     // Factory method
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
     }
 
     @Override

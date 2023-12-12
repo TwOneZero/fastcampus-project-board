@@ -15,13 +15,13 @@ spring:
     password: password1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    open-in-view: false
     # 테스트용 db 데이터 생성
     # data.sql 파일에 초기 데이터 삽입
     defer-datasource-initialization: true
     # 자동으로 ddl 문 생성해줌
     hibernate:
       ddl-auto: create
-    #    open-in-view: false
     show-sql: true
     properties:
       hibernate: # ORM 더 자세한 설정

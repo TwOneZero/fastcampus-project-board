@@ -37,8 +37,10 @@ class ArticleControllerTest {
     private final MockMvc mvc;
 
     //실제 컨트롤러 연결을 끊고 mocking
-    @MockBean private ArticleService articleService;//생성자 주입을 지원하지 않음
-    @MockBean private PaginationService paginationService;
+    @MockBean
+    private ArticleService articleService;//생성자 주입을 지원하지 않음
+    @MockBean
+    private PaginationService paginationService;
 
     public ArticleControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
@@ -49,9 +51,9 @@ class ArticleControllerTest {
     public void givenNothing_whenRequestingArticlesView_thenReturnsIt() throws Exception {
         //Given
 
-        given(articleService.searchArticles(eq(null),eq(null),any(Pageable.class)))
+        given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class)))
                 .willReturn(Page.empty());
-        given(paginationService.getPaginationBarNumbers(anyInt(),anyInt())).willReturn(List.of(0, 1,2,3,4));
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0, 1, 2, 3, 4));
         //When&Then
         mvc.perform(get("/articles"))
                 .andExpect(status().isOk())
@@ -60,7 +62,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("paginationBarNumbers"));
 //                .andExpect(model().attributeExists("searchTypes"));
-        then(articleService).should().searchArticles(eq(null),eq(null),any(Pageable.class));
+        then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
@@ -111,6 +113,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments"))
                 .andExpect(model().attribute("totalCount", totalCount));
+
         then(articleService).should().getArticle(articleId);
         then(articleService).should().getArticleCount();
     }
@@ -156,7 +159,7 @@ class ArticleControllerTest {
         );
     }
 
-    private UserAccountDto createUserAccountDto(){
+    private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
                 1L,
                 "twonezero",

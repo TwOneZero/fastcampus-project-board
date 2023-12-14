@@ -24,7 +24,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 @DisplayName("비즈니스 로직 - 댓글")
-@Disabled("구현 중")
 @ExtendWith(MockitoExtension.class)
 class ArticleCommentServiceTest {
     @InjectMocks

@@ -2,7 +2,7 @@ package com.fastcampus.projectboard.dto.response;
 
 import com.fastcampus.projectboard.dto.ArticleCommentDto;
 
-import java.io.Serializable;
+
 import java.time.LocalDateTime;
 
 public record ArticleCommentResponse( // 특정 필드만 반환하는 dto response 를 만들어 유연한 코드를 작성
@@ -11,7 +11,7 @@ public record ArticleCommentResponse( // 특정 필드만 반환하는 dto respo
         LocalDateTime createdAt,
         String email,
         String nickname
-) implements Serializable {
+)  {
 
     public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname) {
         return new ArticleCommentResponse(id, content, createdAt, email, nickname);

@@ -308,11 +308,7 @@ class ArticleServiceTest {
                 "password",
                 "twonezero@gmail.com",
                 "twonezero",
-                "This is memo",
-                LocalDateTime.now(),
-                "twonezero",
-                LocalDateTime.now(),
-                "twonezero"
+                "This is memo"
         );
     }
 

@@ -317,6 +317,7 @@ class ArticleControllerTest {
         then(articleService).should().deleteArticle(articleId);
     }
 
+
     private ArticleDto createArticleDto() {
         return ArticleDto.of(
                 createUserAccountDto(),
@@ -348,11 +349,7 @@ class ArticleControllerTest {
                 "password",
                 "twonezero@gmail.com",
                 "twonezero",
-                "memo",
-                LocalDateTime.now(),
-                "twonezero",
-                LocalDateTime.now(),
-                "twonezero"
+                "memo"
         );
     }
 }

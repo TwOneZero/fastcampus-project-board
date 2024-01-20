@@ -84,9 +84,10 @@ public class Article extends AuditingFields {
         if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
 //        Article article = (Article) o;
-        if (!(o instanceof Article article)) return false;
+        if (!(o instanceof Article that)) return false;
+//        return Objects.equals(id, that.getId());
         // id != null -> 아직 영속화되지 않은 객체는 같지 않음
-        return id != null && id.equals(article.id);
+        return id != null && id.equals(that.getId());
     }
 
     @Override

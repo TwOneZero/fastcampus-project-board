@@ -8,18 +8,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@ActiveProfiles("testdb")
+
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) -> application.yml 에 지정가능
 @DisplayName("JPA 연결 테스트")
-@Import(JpaConfig.class) //내가 만든 JpaConfig를 import (Auditing 기능 위해)
+@Import(JpaRepositoryTest.TestJpaConfig.class) //내가 만든 JpaConfig를 import (Auditing 기능 위해)
 @DataJpaTest // 모든 단위 테스트들이 각 트랜잭션으로 동작하게 돼서 자동으로 rollback됨
 class JpaRepositoryTest {
 
@@ -108,4 +113,15 @@ class JpaRepositoryTest {
 
     }
 
+
+    // test 할 때만 등록 -> bean scanning 에 포함 x
+    //TestConfiguration : 테스트 시 Auditing 을 security 를 사용하지 않게 하여, 테스트를 쉽게 함
+    @EnableJpaAuditing
+    @TestConfiguration
+    public static class TestJpaConfig {
+        @Bean
+        public AuditorAware<String> auditorAware() {
+            return () -> Optional.of("twonezero");
+        }
+    }
 }

@@ -69,22 +69,26 @@ public class ArticleService {
     public void updateArticle(Long articleId,ArticleDto dto) {
         try{
             Article article = articleRepository.getReferenceById(articleId);
-            // title , content, hashtag
-            if(dto.title() != null){article.setTitle(dto.title());}
-            if(dto.content() != null){article.setContent(dto.content());}
-            article.setHashtag(dto.hashtag()); //null 필드이므로 바로 삽입
+            UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+
+            if(article.getUserAccount().equals(userAccount)){ // 유저아아디로 업데이트 인증
+                // title , content, hashtag
+                if(dto.title() != null){article.setTitle(dto.title());}
+                if(dto.content() != null){article.setContent(dto.content());}
+                article.setHashtag(dto.hashtag()); //null 필드이므로 바로 삽입
+            }
 //        articleRepository.save(article);
 //        save 를 직접 작성하지 않아도 됨!
 //        하나의 transaction 으로 동작하므로 트랜잭션이 끝날 때 영속성 컨텍스트가 변경을 감지함.
 //        감지되면 update 쿼리를 새로 날려서 저장된다.
         }catch (EntityNotFoundException e){
-            log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없음 - dto: {}", dto);
+            log.warn("게시글 업데이트 실패. 필요한 정보를 찾을 수 없습니다. - dto: {}", dto);
         }
 
     }
 
-    public void deleteArticle(long articleId) {
-        articleRepository.deleteById(articleId);
+    public void deleteArticle(Long articleId, String userId) {
+        articleRepository.deleteByIdAndUserAccount_UserId(articleId, userId);
     }
     public long getArticleCount() {return articleRepository.count();}
 

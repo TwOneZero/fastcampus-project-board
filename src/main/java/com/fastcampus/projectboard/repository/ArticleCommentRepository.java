@@ -21,6 +21,8 @@ public interface ArticleCommentRepository extends
 
     List<ArticleComment> findByArticle_Id(Long articleId); //Spring data jpa 공식문서 보기
 
+    void deleteByIdAndUserAccount_UserId(Long articleId, String userId);
+
     @Override
     default void customize(QuerydslBindings bindings, QArticleComment root) {
         bindings.excludeUnlistedProperties(true); // 선택적인 필드들만 검색 기능 동작하게, 다른 필드들은 제외

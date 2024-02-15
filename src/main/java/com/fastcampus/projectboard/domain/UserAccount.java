@@ -20,14 +20,22 @@ public class UserAccount extends AuditingFields {
     @Column(length = 50)
     private String userId;
 
-    @Setter @Column(nullable = false) private String userPassword;
+    @Setter
+    @Column(nullable = false)
+    private String userPassword;
 
-    @Setter @Column(length = 100) private String email;
-    @Setter @Column(length = 100) private String nickname;
-    @Setter private String memo;
+    @Setter
+    @Column(length = 100)
+    private String email;
+    @Setter
+    @Column(length = 100)
+    private String nickname;
+    @Setter
+    private String memo;
 
 
-    protected UserAccount() {}
+    protected UserAccount() {
+    }
 
     private UserAccount(String userId, String userPassword, String email, String nickname, String memo) {
         this.userId = userId;
@@ -59,11 +67,11 @@ public class UserAccount extends AuditingFields {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserAccount that)) return false;
-        return Objects.equals(userId, that.getUserId());
+        return Objects.equals(this.getUserId(), that.getUserId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId);
+        return Objects.hash(this.getUserId());
     }
 }

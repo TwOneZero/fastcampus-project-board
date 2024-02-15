@@ -53,11 +53,11 @@ public class ArticleComment extends AuditingFields {
         if (this == o) return true;
         if (!(o instanceof ArticleComment that)) return false;
         // id != null -> 아직 영속화되지 않은 객체는 같지 않음
-        return id != null && id.equals(that.getId());
+        return this.getId() != null && this.getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.getId());
     }
 }

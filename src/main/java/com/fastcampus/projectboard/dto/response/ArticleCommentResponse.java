@@ -4,19 +4,37 @@ import com.fastcampus.projectboard.dto.ArticleCommentDto;
 
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
-public record ArticleCommentResponse( // 특정 필드만 반환하는 dto response 를 만들어 유연한 코드를 작성
+public record ArticleCommentResponse(
         Long id,
         String content,
         LocalDateTime createdAt,
         String email,
         String nickname,
-        String userId
-)  {
+        String userId,
+        Long parentCommentId,
+
+        Set<ArticleCommentResponse> childComments
+) {
 
     public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname, String userId) {
-        return new ArticleCommentResponse(id, content, createdAt, email, nickname, userId);
+        return  ArticleCommentResponse.of(id, content, createdAt, email, nickname, userId,null);
     }
+
+    public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname, String userId, Long parentCommentId) {
+        //TreeSet 과 Comparator 를 사용하여 시간 순으로 정렬된 자식 댓글을 리턴
+        Comparator<ArticleCommentResponse> childCommentComparator = Comparator
+                .comparing(ArticleCommentResponse::createdAt)
+                .thenComparingLong(ArticleCommentResponse::id);
+
+        return new ArticleCommentResponse(id, content, createdAt, email, nickname, userId, parentCommentId, new TreeSet<>(childCommentComparator));
+    }
+
+
+
 
     public static ArticleCommentResponse from(ArticleCommentDto dto) {
         String nickname = dto.userAccountDto().nickname();
@@ -25,14 +43,19 @@ public record ArticleCommentResponse( // 특정 필드만 반환하는 dto respo
             nickname = dto.userAccountDto().userId();
         }
 
-        return new ArticleCommentResponse(
+        return  ArticleCommentResponse.of(
                 dto.id(),
                 dto.content(),
                 dto.createdAt(),
                 dto.userAccountDto().email(),
                 nickname,
-                dto.userAccountDto().userId()
+                dto.userAccountDto().userId(),
+                dto.parentCommentId()
         );
+    }
+
+    public boolean hasParentComment() {
+        return parentCommentId != null;
     }
 
 }

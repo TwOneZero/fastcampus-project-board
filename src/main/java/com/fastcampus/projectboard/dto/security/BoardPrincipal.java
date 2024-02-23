@@ -5,8 +5,10 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,11 +18,15 @@ public record BoardPrincipal(
         Collection<? extends GrantedAuthority> authorities,
         String email,
         String nickname,
-        String memo
-) implements UserDetails {
-
+        String memo,
+        Map<String, Object> oAuth2Attribute
+) implements UserDetails, OAuth2User {
 
     public static BoardPrincipal of(String username, String password, String email, String nickname, String memo) {
+        return of(username, password, email, nickname, memo, Map.of());
+    }
+
+    public static BoardPrincipal of(String username, String password, String email, String nickname, String memo, Map<String, Object> oAuth2Attribute) {
         Set<RoleType> roleTypes = Set.of(RoleType.USER);
         return new BoardPrincipal(
                 username,
@@ -31,7 +37,8 @@ public record BoardPrincipal(
                         .collect(Collectors.toUnmodifiableSet()),
                 email,
                 nickname,
-                memo
+                memo,
+                oAuth2Attribute
         );
     }
 
@@ -70,8 +77,6 @@ public record BoardPrincipal(
         return authorities;
     }
 
-
-
     //프로젝트에서 적용하지 않는 메소드들 모두 true
     @Override
     public boolean isAccountNonExpired() {
@@ -93,13 +98,24 @@ public record BoardPrincipal(
         return true;
     }
 
+    //OAuth
+    @Override
+    public Map<String, Object> getAttributes() {
+        return oAuth2Attribute;
+    }
+
+    @Override
+    public String getName() {
+        return username;
+    }
+
     @Getter
     public enum RoleType {
         USER("ROLE_USER");
 
         private final String name;
 
-        RoleType(String name){
+        RoleType(String name) {
             this.name = name;
         }
     }
